@@ -1,0 +1,68 @@
+server:
+  port: 8080
+  servlet:
+    context-path:
+spring:
+  #  mvc:
+  #    view:
+  #      prefix: classpath:/static/
+  #      suffix: .html
+  #    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/resources/,classpath:/public/
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+
+  datasource:
+    url: jdbc:mysql://120.77.82.11/dev?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull
+    username: yunku
+    password: yunkuzhineng
+  #    driver-class-name: com.mysql.jdbc.Driver
+  #    type: com.alibaba.druid.pool.DruidDataSource
+  #    druid:
+  #      filters: stat,wall,log4j,config
+  #      max-active: 100
+  #      initial-size: 1
+  #      max-wait: 60000
+  #      min-idle: 1
+  #      time-between-eviction-runs-millis: 60000
+  #      min-evictable-idle-time-millis: 300000
+  #      validation-query: select 'x'
+  #      test-while-idle: true
+  #      test-on-borrow: false
+  #      test-on-return: false
+  #      pool-prepared-statements: true
+  #      max-open-prepared-statements: 50
+  #      max-pool-prepared-statement-per-connection-size: 20
+  #      maxPoolPreparedStatementPerConnectionSize: 20
+  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  redis:
+    host: 120.77.82.11
+    database: 0
+    port: 6379
+    timeout: 1000
+    # password: redis_jinghanv5
+    lettuce:
+      pool:
+        max-idle: 10
+        max-active: 10
+        min-idle: 5
+        max-wait: 10000
+
+mybatis:
+  #config-location: classpath:mapper/mapper-config.xml
+  type-aliases-package:  com.yunku.demo.core.model,com.yunku.demo.core.model.example
+  mapper-locations:  classpath:/mapper/*Mapper.xml
+#shiro-redis.enabled: false
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+wechat:
+  miniAppId: wxfc703046b5bdbbe0
+  miniAppSecret: ada5930a2df107749c9e93662b62bb0a
