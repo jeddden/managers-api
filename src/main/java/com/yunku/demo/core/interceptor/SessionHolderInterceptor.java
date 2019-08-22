@@ -19,9 +19,7 @@ import com.yunku.demo.common.baseclass.BaseController;
 import com.yunku.demo.tool.HttpSessionContext;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.stereotype.Component;
 
 /**
  * 静态调用session的拦截器
@@ -29,8 +27,8 @@ import org.springframework.stereotype.Component;
  * @author fengshuonan
  * @date 2016年11月13日 下午10:15:42
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class SessionHolderInterceptor extends BaseController {
 
     @Pointcut("execution(* com.yunku.demo.core.controller.*.*(..))")

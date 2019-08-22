@@ -15,16 +15,18 @@
  */
 package com.yunku.demo.core.aop;
 
+import com.yunku.demo.common.exception.AuthenticationException;
 import com.yunku.demo.common.exception.ServiceException;
 import com.yunku.demo.common.respons.ErrorResponseData;
+import com.yunku.demo.common.respons.ResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 /**
@@ -33,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author fengshuonan
  * @date 2016年11月12日 下午3:19:56
  */
-@ControllerAdvice
+@RestControllerAdvice
 @Order(-1)
 public class GlobalExceptionHandler {
 
@@ -75,16 +77,17 @@ public class GlobalExceptionHandler {
 //    }
 
     /**
-     * 账号密码错误异常
+     * 权限错误异常
      */
-//    @ExceptionHandler(CredentialsException.class)
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    public String credentials(CredentialsException e, Model model) {
-//        String username = getRequest().getParameter("username");
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ResponseData authentication(AuthenticationException e) {
+//        String username = HttpContext.getRequest().getParameter("username");
 //        LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号密码错误", getIp()));
-//        model.addAttribute("tips", "账号密码错误");
-//        return "/login.html";
-//    }
+        log.debug("权限异常:", e);
+        return new ErrorResponseData(e.getCode(), e.getMessage());
+    }
 
     /**
      * 验证码错误异常
@@ -113,13 +116,13 @@ public class GlobalExceptionHandler {
     /**
      * 拦截未知的运行时异常
      */
-//    @ExceptionHandler(RuntimeException.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ResponseBody
-//    public ErrorResponseData notFount(RuntimeException e) {
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorResponseData notFount(RuntimeException e) {
 //        LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
 //        getRequest().setAttribute("tip", "服务器未知运行时异常");
-//        log.error("运行时异常:", e);
-//        return new ErrorResponseData(BizExceptionEnum.SERVER_ERROR.getCode(), BizExceptionEnum.SERVER_ERROR.getMessage());
-//    }
+        log.error("运行时异常:", e);
+        return new ErrorResponseData(500, e.getMessage());
+    }
 }

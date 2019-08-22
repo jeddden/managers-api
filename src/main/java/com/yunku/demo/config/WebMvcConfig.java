@@ -1,8 +1,11 @@
 package com.yunku.demo.config;
 
 import com.yunku.demo.common.xss.XssFilter;
+import com.yunku.demo.config.properties.SessionProperties;
 import com.yunku.demo.core.ConfigListener;
-import com.yunku.demo.core.interceptor.AttributeSetInteceptor;
+import com.yunku.demo.core.interceptor.ApiInterceptor;
+import com.yunku.demo.tool.AESUtil;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 
 /**
@@ -35,8 +39,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/**");
         LinkedList linkedList = new LinkedList();
         linkedList.add("/user/login");
-        linkedList.add("");
-        registry.addInterceptor(new AttributeSetInteceptor()).excludePathPatterns(linkedList).addPathPatterns("/**");
+        linkedList.add("/user/logintest");
+        linkedList.add("/user/wxappLoginAgain");
+        linkedList.add("/error");
+        linkedList.add("/webjars/**");
+        linkedList.add("/swagger-ui.html/**");
+        linkedList.add("/swagger-resources/**");
+        registry.addInterceptor(new ApiInterceptor()).excludePathPatterns(linkedList).addPathPatterns("/**");
     }
 
 
@@ -69,6 +78,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return new ServletListenerRegistrationBean<>(new ConfigListener());
     }
 
+    @Bean
+    @ConfigurationProperties(prefix = "zsession",ignoreInvalidFields = true)
+    public SessionProperties getSessionProperties(){
+        return new SessionProperties();
+    }
 
-
+    @Bean
+    public AESUtil getAESUtil() throws NoSuchAlgorithmException {
+       return new AESUtil();
+    }
 }

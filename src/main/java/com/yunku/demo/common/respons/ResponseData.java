@@ -6,22 +6,22 @@ import java.io.Serializable;
  * @author Jeddden
  * @create 2019-06-14 17:23
  */
-public class ResponseData implements Serializable {
-    public static final String DEFAULT_SUCCESS_MESSAGE = "请求成功";
-    public static final String DEFAULT_ERROR_MESSAGE = "网络异常";
+public class ResponseData<T> implements Serializable {
+    public static final String DEFAULT_SUCCESS_MESSAGE = "seccess";
+    public static final String DEFAULT_ERROR_MESSAGE = "fail";
     public static final Integer DEFAULT_SUCCESS_CODE = 200;
     public static final Integer DEFAULT_ERROR_CODE = 500;
     private Boolean success;
-    private Integer code;
+    private Integer status;
     private String message;
     private Object data;
 
     public ResponseData() {
     }
 
-    public ResponseData(Boolean success, Integer code, String message, Object data) {
+    public ResponseData(Boolean success, Integer status, String message, Object data) {
         this.success = success;
-        this.code = code;
+        this.status = status;
         this.message = message;
         this.data = data;
     }
@@ -34,28 +34,28 @@ public class ResponseData implements Serializable {
         return new SuccessResponseData(object);
     }
 
-    public static SuccessResponseData success(Integer code, String message, Object object) {
-        return new SuccessResponseData(code, message, object);
+    public static SuccessResponseData success(Integer status, String message, Object object) {
+        return new SuccessResponseData(status, message, object);
     }
 
     public static ErrorResponseData error(String message) {
         return new ErrorResponseData(message);
     }
 
-    public static ErrorResponseData error(Integer code, String message) {
-        return new ErrorResponseData(code, message);
+    public static ErrorResponseData error(Integer status, String message) {
+        return new ErrorResponseData(status, message);
     }
 
-    public static ErrorResponseData error(Integer code, String message, Object object) {
-        return new ErrorResponseData(code, message, object);
+    public static ErrorResponseData error(Integer status, String message, Object object) {
+        return new ErrorResponseData(status, message, object);
     }
 
     public Boolean getSuccess() {
         return this.success;
     }
 
-    public Integer getCode() {
-        return this.code;
+    public Integer getStatus() {
+        return this.status;
     }
 
     public String getMessage() {
@@ -70,8 +70,8 @@ public class ResponseData implements Serializable {
         this.success = success;
     }
 
-    public void setCode(final Integer code) {
-        this.code = code;
+    public void setStatus(final Integer status) {
+        this.status = status;
     }
 
     public void setMessage(final String message) {
@@ -107,13 +107,13 @@ public class ResponseData implements Serializable {
                     return false;
                 }
 
-                Object this$code = this.getCode();
-                Object other$code = other.getCode();
-                if (this$code == null) {
-                    if (other$code != null) {
+                Object this$status = this.getStatus();
+                Object other$status = other.getStatus();
+                if (this$status == null) {
+                    if (other$status != null) {
                         return false;
                     }
-                } else if (!this$code.equals(other$code)) {
+                } else if (!this$status.equals(other$status)) {
                     return false;
                 }
 
@@ -146,23 +146,23 @@ public class ResponseData implements Serializable {
         return other instanceof ResponseData;
     }
 
-    @Override
-    public int hashCode() {
-        int PRIME = 1;
-        int result = 1;
-        Object $success = this.getSuccess();
-        result = result * 59 + ($success == null ? 43 : $success.hashCode());
-        Object $code = this.getCode();
-        result = result * 59 + ($code == null ? 43 : $code.hashCode());
-        Object $message = this.getMessage();
-        result = result * 59 + ($message == null ? 43 : $message.hashCode());
-        Object $data = this.getData();
-        result = result * 59 + ($data == null ? 43 : $data.hashCode());
-        return result;
-    }
+//    @Override
+//    public int hashstatus() {
+//        int PRIME = 1;
+//        int result = 1;
+//        Object $success = this.getSuccess();
+//        result = result * 59 + ($success == null ? 43 : $success.hashstatus());
+//        Object $status = this.getstatus();
+//        result = result * 59 + ($status == null ? 43 : $status.hashstatus());
+//        Object $message = this.getMessage();
+//        result = result * 59 + ($message == null ? 43 : $message.hashstatus());
+//        Object $data = this.getData();
+//        result = result * 59 + ($data == null ? 43 : $data.hashstatus());
+//        return result;
+//    }
 
     @Override
     public String toString() {
-        return "ResponseData(success=" + this.getSuccess() + ", code=" + this.getCode() + ", message=" + this.getMessage() + ", data=" + this.getData() + ")";
+        return "ResponseData(success=" + this.getSuccess() + ", status=" + this.getStatus() + ", message=" + this.getMessage() + ", data=" + this.getData() + ")";
     }
 }

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunku.demo.core.dao.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.yunku.demo.core.model.Role">
+    <id column="id" jdbcType="SMALLINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="seq" jdbcType="TINYINT" property="seq" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="isdefault" jdbcType="TINYINT" property="isdefault" />
+    <result column="manu_id" jdbcType="INTEGER" property="manuId" />
+    <result column="agent_id" jdbcType="INTEGER" property="agentId" />
+    <result column="saler_id" jdbcType="INTEGER" property="salerId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, `name`, seq, description, isdefault, manu_id, agent_id, saler_id
+  </sql>
+  <select id="selectByExample" parameterType="com.yunku.demo.core.model.example.RoleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_role
+    where id = #{id,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from t_role
+    where id = #{id,jdbcType=SMALLINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yunku.demo.core.model.example.RoleExample">
+    delete from t_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.Role" useGeneratedKeys="true">
+    insert into t_role (`name`, seq, description, 
+      isdefault, manu_id, agent_id, 
+      saler_id)
+    values (#{name,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, 
+      #{isdefault,jdbcType=TINYINT}, #{manuId,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER}, 
+      #{salerId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.Role" useGeneratedKeys="true">
+    insert into t_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isdefault != null">
+        isdefault,
+      </if>
+      <if test="manuId != null">
+        manu_id,
+      </if>
+      <if test="agentId != null">
+        agent_id,
+      </if>
+      <if test="salerId != null">
+        saler_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isdefault != null">
+        #{isdefault,jdbcType=TINYINT},
+      </if>
+      <if test="manuId != null">
+        #{manuId,jdbcType=INTEGER},
+      </if>
+      <if test="agentId != null">
+        #{agentId,jdbcType=INTEGER},
+      </if>
+      <if test="salerId != null">
+        #{salerId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yunku.demo.core.model.example.RoleExample" resultType="java.lang.Long">
+    select count(*) from t_role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_role
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=SMALLINT},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.seq != null">
+        seq = #{record.seq,jdbcType=TINYINT},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isdefault != null">
+        isdefault = #{record.isdefault,jdbcType=TINYINT},
+      </if>
+      <if test="record.manuId != null">
+        manu_id = #{record.manuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.agentId != null">
+        agent_id = #{record.agentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.salerId != null">
+        saler_id = #{record.salerId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_role
+    set id = #{record.id,jdbcType=SMALLINT},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      seq = #{record.seq,jdbcType=TINYINT},
+      description = #{record.description,jdbcType=VARCHAR},
+      isdefault = #{record.isdefault,jdbcType=TINYINT},
+      manu_id = #{record.manuId,jdbcType=INTEGER},
+      agent_id = #{record.agentId,jdbcType=INTEGER},
+      saler_id = #{record.salerId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunku.demo.core.model.Role">
+    update t_role
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isdefault != null">
+        isdefault = #{isdefault,jdbcType=TINYINT},
+      </if>
+      <if test="manuId != null">
+        manu_id = #{manuId,jdbcType=INTEGER},
+      </if>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=INTEGER},
+      </if>
+      <if test="salerId != null">
+        saler_id = #{salerId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunku.demo.core.model.Role">
+    update t_role
+    set `name` = #{name,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=TINYINT},
+      description = #{description,jdbcType=VARCHAR},
+      isdefault = #{isdefault,jdbcType=TINYINT},
+      manu_id = #{manuId,jdbcType=INTEGER},
+      agent_id = #{agentId,jdbcType=INTEGER},
+      saler_id = #{salerId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=SMALLINT}
+  </update>
+
+  <!-- roleMapperj -->
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select tr.* from t_role tr left join t_user_role on role_id = tr.id where user_id = ${userId}
+  </select>
+</mapper>

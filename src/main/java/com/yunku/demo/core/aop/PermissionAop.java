@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 public class PermissionAop {
 
 //    @Autowired
-//    private PermissionCheckService check;
+//    private PermissiondCheckService check;
 //
 //    @Pointcut(value = "@annotation(cn.stylefeng.guns.core.common.annotion.Permission)")
 //    private void cutPermission() {

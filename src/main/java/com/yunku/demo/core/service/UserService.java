@@ -6,6 +6,9 @@ package com.yunku.demo.core.service;
  */
 public interface UserService {
 
+    // 记录openid
+    int recordOpenId(Short id,String openid);
 
+    int cleanOpenId(Short id);
 
 }

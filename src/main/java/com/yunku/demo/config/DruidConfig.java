@@ -85,7 +85,7 @@ public class DruidConfig {
     @Bean
     public JdkRegexpMethodPointcut druidStatPointcut() {
         JdkRegexpMethodPointcut druidStatPointcut = new JdkRegexpMethodPointcut();
-        String patterns = "com.yunku.demo.core.service.*";
+        String patterns = "com.yunku.demo.core.dao.*";
         //可以set多个
         druidStatPointcut.setPatterns(patterns);
         return druidStatPointcut;

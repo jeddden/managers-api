@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunku.demo.core.dao.DeviceMapper">
+  <resultMap id="BaseResultMap" type="com.yunku.demo.core.model.Device">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="device_code" jdbcType="VARCHAR" property="deviceCode" />
+    <result column="areaname" jdbcType="VARCHAR" property="areaname" />
+    <result column="maintainer" jdbcType="VARCHAR" property="maintainer" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="online_status" jdbcType="INTEGER" property="onlineStatus" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="pay_strategy_id" jdbcType="BIGINT" property="payStrategyId" />
+    <result column="charge_time_id" jdbcType="INTEGER" property="chargeTimeId" />
+    <result column="encryption" jdbcType="INTEGER" property="encryption" />
+    <result column="private_key" jdbcType="VARCHAR" property="privateKey" />
+    <result column="public_key" jdbcType="VARCHAR" property="publicKey" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="bind_time" jdbcType="TIMESTAMP" property="bindTime" />
+    <result column="unbind_time" jdbcType="TIMESTAMP" property="unbindTime" />
+    <result column="overtime" jdbcType="INTEGER" property="overtime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="alipay_code" jdbcType="VARCHAR" property="alipayCode" />
+    <result column="device_type_id" jdbcType="INTEGER" property="deviceTypeId" />
+    <result column="settle_type_id" jdbcType="BIGINT" property="settleTypeId" />
+    <result column="alipay_code_flag" jdbcType="INTEGER" property="alipayCodeFlag" />
+    <result column="debug_flag" jdbcType="INTEGER" property="debugFlag" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="hardware" jdbcType="INTEGER" property="hardware" />
+    <result column="start_run_time" jdbcType="TIMESTAMP" property="startRunTime" />
+    <result column="monthly_charge" jdbcType="INTEGER" property="monthlyCharge" />
+    <result column="ic_order_flag" jdbcType="INTEGER" property="icOrderFlag" />
+    <result column="produce_user_id" jdbcType="BIGINT" property="produceUserId" />
+    <result column="notify_offline_flag" jdbcType="INTEGER" property="notifyOfflineFlag" />
+    <result column="notify_offline_time" jdbcType="TIMESTAMP" property="notifyOfflineTime" />
+    <result column="aliyun" jdbcType="VARCHAR" property="aliyun" />
+    <result column="ccid" jdbcType="VARCHAR" property="ccid" />
+    <result column="ccid_flag" jdbcType="INTEGER" property="ccidFlag" />
+    <result column="min_power" jdbcType="INTEGER" property="minPower" />
+    <result column="max_power" jdbcType="INTEGER" property="maxPower" />
+    <result column="min_power_time" jdbcType="INTEGER" property="minPowerTime" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="lock_status" jdbcType="TINYINT" property="lockStatus" />
+    <result column="manu_id" jdbcType="INTEGER" property="manuId" />
+    <result column="agent_id" jdbcType="INTEGER" property="agentId" />
+    <result column="saler_id" jdbcType="INTEGER" property="salerId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, `name`, device_code, areaname, maintainer, mobile, description, `status`, online_status, 
+    user_id, pay_strategy_id, charge_time_id, encryption, private_key, public_key, create_time, 
+    update_time, bind_time, unbind_time, overtime, is_delete, alipay_code, device_type_id, 
+    settle_type_id, alipay_code_flag, debug_flag, product_id, hardware, start_run_time, 
+    monthly_charge, ic_order_flag, produce_user_id, notify_offline_flag, notify_offline_time, 
+    aliyun, ccid, ccid_flag, min_power, max_power, min_power_time, version, lock_status, 
+    manu_id, agent_id, saler_id
+  </sql>
+  <select id="selectByExample" parameterType="com.yunku.demo.core.model.example.DeviceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_device
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_device
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_device
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yunku.demo.core.model.example.DeviceExample">
+    delete from t_device
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.Device" useGeneratedKeys="true">
+    insert into t_device (`name`, device_code, areaname, 
+      maintainer, mobile, description, 
+      `status`, online_status, user_id, 
+      pay_strategy_id, charge_time_id, encryption, 
+      private_key, public_key, create_time, 
+      update_time, bind_time, unbind_time, 
+      overtime, is_delete, alipay_code, 
+      device_type_id, settle_type_id, alipay_code_flag, 
+      debug_flag, product_id, hardware, 
+      start_run_time, monthly_charge, ic_order_flag, 
+      produce_user_id, notify_offline_flag, notify_offline_time, 
+      aliyun, ccid, ccid_flag, 
+      min_power, max_power, min_power_time, 
+      version, lock_status, manu_id, 
+      agent_id, saler_id)
+    values (#{name,jdbcType=VARCHAR}, #{deviceCode,jdbcType=VARCHAR}, #{areaname,jdbcType=VARCHAR}, 
+      #{maintainer,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{onlineStatus,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, 
+      #{payStrategyId,jdbcType=BIGINT}, #{chargeTimeId,jdbcType=INTEGER}, #{encryption,jdbcType=INTEGER}, 
+      #{privateKey,jdbcType=VARCHAR}, #{publicKey,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{bindTime,jdbcType=TIMESTAMP}, #{unbindTime,jdbcType=TIMESTAMP}, 
+      #{overtime,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, #{alipayCode,jdbcType=VARCHAR}, 
+      #{deviceTypeId,jdbcType=INTEGER}, #{settleTypeId,jdbcType=BIGINT}, #{alipayCodeFlag,jdbcType=INTEGER}, 
+      #{debugFlag,jdbcType=INTEGER}, #{productId,jdbcType=BIGINT}, #{hardware,jdbcType=INTEGER}, 
+      #{startRunTime,jdbcType=TIMESTAMP}, #{monthlyCharge,jdbcType=INTEGER}, #{icOrderFlag,jdbcType=INTEGER}, 
+      #{produceUserId,jdbcType=BIGINT}, #{notifyOfflineFlag,jdbcType=INTEGER}, #{notifyOfflineTime,jdbcType=TIMESTAMP}, 
+      #{aliyun,jdbcType=VARCHAR}, #{ccid,jdbcType=VARCHAR}, #{ccidFlag,jdbcType=INTEGER}, 
+      #{minPower,jdbcType=INTEGER}, #{maxPower,jdbcType=INTEGER}, #{minPowerTime,jdbcType=INTEGER}, 
+      #{version,jdbcType=VARCHAR}, #{lockStatus,jdbcType=TINYINT}, #{manuId,jdbcType=INTEGER}, 
+      #{agentId,jdbcType=INTEGER}, #{salerId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.Device" useGeneratedKeys="true">
+    insert into t_device
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="deviceCode != null">
+        device_code,
+      </if>
+      <if test="areaname != null">
+        areaname,
+      </if>
+      <if test="maintainer != null">
+        maintainer,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="onlineStatus != null">
+        online_status,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="payStrategyId != null">
+        pay_strategy_id,
+      </if>
+      <if test="chargeTimeId != null">
+        charge_time_id,
+      </if>
+      <if test="encryption != null">
+        encryption,
+      </if>
+      <if test="privateKey != null">
+        private_key,
+      </if>
+      <if test="publicKey != null">
+        public_key,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="bindTime != null">
+        bind_time,
+      </if>
+      <if test="unbindTime != null">
+        unbind_time,
+      </if>
+      <if test="overtime != null">
+        overtime,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="alipayCode != null">
+        alipay_code,
+      </if>
+      <if test="deviceTypeId != null">
+        device_type_id,
+      </if>
+      <if test="settleTypeId != null">
+        settle_type_id,
+      </if>
+      <if test="alipayCodeFlag != null">
+        alipay_code_flag,
+      </if>
+      <if test="debugFlag != null">
+        debug_flag,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="hardware != null">
+        hardware,
+      </if>
+      <if test="startRunTime != null">
+        start_run_time,
+      </if>
+      <if test="monthlyCharge != null">
+        monthly_charge,
+      </if>
+      <if test="icOrderFlag != null">
+        ic_order_flag,
+      </if>
+      <if test="produceUserId != null">
+        produce_user_id,
+      </if>
+      <if test="notifyOfflineFlag != null">
+        notify_offline_flag,
+      </if>
+      <if test="notifyOfflineTime != null">
+        notify_offline_time,
+      </if>
+      <if test="aliyun != null">
+        aliyun,
+      </if>
+      <if test="ccid != null">
+        ccid,
+      </if>
+      <if test="ccidFlag != null">
+        ccid_flag,
+      </if>
+      <if test="minPower != null">
+        min_power,
+      </if>
+      <if test="maxPower != null">
+        max_power,
+      </if>
+      <if test="minPowerTime != null">
+        min_power_time,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="lockStatus != null">
+        lock_status,
+      </if>
+      <if test="manuId != null">
+        manu_id,
+      </if>
+      <if test="agentId != null">
+        agent_id,
+      </if>
+      <if test="salerId != null">
+        saler_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+        #{deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaname != null">
+        #{areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null">
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="onlineStatus != null">
+        #{onlineStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="payStrategyId != null">
+        #{payStrategyId,jdbcType=BIGINT},
+      </if>
+      <if test="chargeTimeId != null">
+        #{chargeTimeId,jdbcType=INTEGER},
+      </if>
+      <if test="encryption != null">
+        #{encryption,jdbcType=INTEGER},
+      </if>
+      <if test="privateKey != null">
+        #{privateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="publicKey != null">
+        #{publicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bindTime != null">
+        #{bindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unbindTime != null">
+        #{unbindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overtime != null">
+        #{overtime,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="alipayCode != null">
+        #{alipayCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceTypeId != null">
+        #{deviceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="settleTypeId != null">
+        #{settleTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="alipayCodeFlag != null">
+        #{alipayCodeFlag,jdbcType=INTEGER},
+      </if>
+      <if test="debugFlag != null">
+        #{debugFlag,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="hardware != null">
+        #{hardware,jdbcType=INTEGER},
+      </if>
+      <if test="startRunTime != null">
+        #{startRunTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="monthlyCharge != null">
+        #{monthlyCharge,jdbcType=INTEGER},
+      </if>
+      <if test="icOrderFlag != null">
+        #{icOrderFlag,jdbcType=INTEGER},
+      </if>
+      <if test="produceUserId != null">
+        #{produceUserId,jdbcType=BIGINT},
+      </if>
+      <if test="notifyOfflineFlag != null">
+        #{notifyOfflineFlag,jdbcType=INTEGER},
+      </if>
+      <if test="notifyOfflineTime != null">
+        #{notifyOfflineTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aliyun != null">
+        #{aliyun,jdbcType=VARCHAR},
+      </if>
+      <if test="ccid != null">
+        #{ccid,jdbcType=VARCHAR},
+      </if>
+      <if test="ccidFlag != null">
+        #{ccidFlag,jdbcType=INTEGER},
+      </if>
+      <if test="minPower != null">
+        #{minPower,jdbcType=INTEGER},
+      </if>
+      <if test="maxPower != null">
+        #{maxPower,jdbcType=INTEGER},
+      </if>
+      <if test="minPowerTime != null">
+        #{minPowerTime,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="lockStatus != null">
+        #{lockStatus,jdbcType=TINYINT},
+      </if>
+      <if test="manuId != null">
+        #{manuId,jdbcType=INTEGER},
+      </if>
+      <if test="agentId != null">
+        #{agentId,jdbcType=INTEGER},
+      </if>
+      <if test="salerId != null">
+        #{salerId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yunku.demo.core.model.example.DeviceExample" resultType="java.lang.Long">
+    select count(*) from t_device
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_device
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceCode != null">
+        device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaname != null">
+        areaname = #{record.areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null">
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null">
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.onlineStatus != null">
+        online_status = #{record.onlineStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.payStrategyId != null">
+        pay_strategy_id = #{record.payStrategyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.chargeTimeId != null">
+        charge_time_id = #{record.chargeTimeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.encryption != null">
+        encryption = #{record.encryption,jdbcType=INTEGER},
+      </if>
+      <if test="record.privateKey != null">
+        private_key = #{record.privateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publicKey != null">
+        public_key = #{record.publicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bindTime != null">
+        bind_time = #{record.bindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.unbindTime != null">
+        unbind_time = #{record.unbindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.overtime != null">
+        overtime = #{record.overtime,jdbcType=INTEGER},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="record.alipayCode != null">
+        alipay_code = #{record.alipayCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceTypeId != null">
+        device_type_id = #{record.deviceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.settleTypeId != null">
+        settle_type_id = #{record.settleTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.alipayCodeFlag != null">
+        alipay_code_flag = #{record.alipayCodeFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.debugFlag != null">
+        debug_flag = #{record.debugFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=BIGINT},
+      </if>
+      <if test="record.hardware != null">
+        hardware = #{record.hardware,jdbcType=INTEGER},
+      </if>
+      <if test="record.startRunTime != null">
+        start_run_time = #{record.startRunTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.monthlyCharge != null">
+        monthly_charge = #{record.monthlyCharge,jdbcType=INTEGER},
+      </if>
+      <if test="record.icOrderFlag != null">
+        ic_order_flag = #{record.icOrderFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.produceUserId != null">
+        produce_user_id = #{record.produceUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.notifyOfflineFlag != null">
+        notify_offline_flag = #{record.notifyOfflineFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.notifyOfflineTime != null">
+        notify_offline_time = #{record.notifyOfflineTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aliyun != null">
+        aliyun = #{record.aliyun,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ccid != null">
+        ccid = #{record.ccid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ccidFlag != null">
+        ccid_flag = #{record.ccidFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.minPower != null">
+        min_power = #{record.minPower,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxPower != null">
+        max_power = #{record.maxPower,jdbcType=INTEGER},
+      </if>
+      <if test="record.minPowerTime != null">
+        min_power_time = #{record.minPowerTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lockStatus != null">
+        lock_status = #{record.lockStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.manuId != null">
+        manu_id = #{record.manuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.agentId != null">
+        agent_id = #{record.agentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.salerId != null">
+        saler_id = #{record.salerId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_device
+    set id = #{record.id,jdbcType=INTEGER},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      areaname = #{record.areaname,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      `status` = #{record.status,jdbcType=INTEGER},
+      online_status = #{record.onlineStatus,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      pay_strategy_id = #{record.payStrategyId,jdbcType=BIGINT},
+      charge_time_id = #{record.chargeTimeId,jdbcType=INTEGER},
+      encryption = #{record.encryption,jdbcType=INTEGER},
+      private_key = #{record.privateKey,jdbcType=VARCHAR},
+      public_key = #{record.publicKey,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      bind_time = #{record.bindTime,jdbcType=TIMESTAMP},
+      unbind_time = #{record.unbindTime,jdbcType=TIMESTAMP},
+      overtime = #{record.overtime,jdbcType=INTEGER},
+      is_delete = #{record.isDelete,jdbcType=INTEGER},
+      alipay_code = #{record.alipayCode,jdbcType=VARCHAR},
+      device_type_id = #{record.deviceTypeId,jdbcType=INTEGER},
+      settle_type_id = #{record.settleTypeId,jdbcType=BIGINT},
+      alipay_code_flag = #{record.alipayCodeFlag,jdbcType=INTEGER},
+      debug_flag = #{record.debugFlag,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=BIGINT},
+      hardware = #{record.hardware,jdbcType=INTEGER},
+      start_run_time = #{record.startRunTime,jdbcType=TIMESTAMP},
+      monthly_charge = #{record.monthlyCharge,jdbcType=INTEGER},
+      ic_order_flag = #{record.icOrderFlag,jdbcType=INTEGER},
+      produce_user_id = #{record.produceUserId,jdbcType=BIGINT},
+      notify_offline_flag = #{record.notifyOfflineFlag,jdbcType=INTEGER},
+      notify_offline_time = #{record.notifyOfflineTime,jdbcType=TIMESTAMP},
+      aliyun = #{record.aliyun,jdbcType=VARCHAR},
+      ccid = #{record.ccid,jdbcType=VARCHAR},
+      ccid_flag = #{record.ccidFlag,jdbcType=INTEGER},
+      min_power = #{record.minPower,jdbcType=INTEGER},
+      max_power = #{record.maxPower,jdbcType=INTEGER},
+      min_power_time = #{record.minPowerTime,jdbcType=INTEGER},
+      version = #{record.version,jdbcType=VARCHAR},
+      lock_status = #{record.lockStatus,jdbcType=TINYINT},
+      manu_id = #{record.manuId,jdbcType=INTEGER},
+      agent_id = #{record.agentId,jdbcType=INTEGER},
+      saler_id = #{record.salerId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunku.demo.core.model.Device">
+    update t_device
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+        device_code = #{deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaname != null">
+        areaname = #{areaname,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null">
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="onlineStatus != null">
+        online_status = #{onlineStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="payStrategyId != null">
+        pay_strategy_id = #{payStrategyId,jdbcType=BIGINT},
+      </if>
+      <if test="chargeTimeId != null">
+        charge_time_id = #{chargeTimeId,jdbcType=INTEGER},
+      </if>
+      <if test="encryption != null">
+        encryption = #{encryption,jdbcType=INTEGER},
+      </if>
+      <if test="privateKey != null">
+        private_key = #{privateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="publicKey != null">
+        public_key = #{publicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bindTime != null">
+        bind_time = #{bindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unbindTime != null">
+        unbind_time = #{unbindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overtime != null">
+        overtime = #{overtime,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="alipayCode != null">
+        alipay_code = #{alipayCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceTypeId != null">
+        device_type_id = #{deviceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="settleTypeId != null">
+        settle_type_id = #{settleTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="alipayCodeFlag != null">
+        alipay_code_flag = #{alipayCodeFlag,jdbcType=INTEGER},
+      </if>
+      <if test="debugFlag != null">
+        debug_flag = #{debugFlag,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="hardware != null">
+        hardware = #{hardware,jdbcType=INTEGER},
+      </if>
+      <if test="startRunTime != null">
+        start_run_time = #{startRunTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="monthlyCharge != null">
+        monthly_charge = #{monthlyCharge,jdbcType=INTEGER},
+      </if>
+      <if test="icOrderFlag != null">
+        ic_order_flag = #{icOrderFlag,jdbcType=INTEGER},
+      </if>
+      <if test="produceUserId != null">
+        produce_user_id = #{produceUserId,jdbcType=BIGINT},
+      </if>
+      <if test="notifyOfflineFlag != null">
+        notify_offline_flag = #{notifyOfflineFlag,jdbcType=INTEGER},
+      </if>
+      <if test="notifyOfflineTime != null">
+        notify_offline_time = #{notifyOfflineTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aliyun != null">
+        aliyun = #{aliyun,jdbcType=VARCHAR},
+      </if>
+      <if test="ccid != null">
+        ccid = #{ccid,jdbcType=VARCHAR},
+      </if>
+      <if test="ccidFlag != null">
+        ccid_flag = #{ccidFlag,jdbcType=INTEGER},
+      </if>
+      <if test="minPower != null">
+        min_power = #{minPower,jdbcType=INTEGER},
+      </if>
+      <if test="maxPower != null">
+        max_power = #{maxPower,jdbcType=INTEGER},
+      </if>
+      <if test="minPowerTime != null">
+        min_power_time = #{minPowerTime,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="lockStatus != null">
+        lock_status = #{lockStatus,jdbcType=TINYINT},
+      </if>
+      <if test="manuId != null">
+        manu_id = #{manuId,jdbcType=INTEGER},
+      </if>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=INTEGER},
+      </if>
+      <if test="salerId != null">
+        saler_id = #{salerId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunku.demo.core.model.Device">
+    update t_device
+    set `name` = #{name,jdbcType=VARCHAR},
+      device_code = #{deviceCode,jdbcType=VARCHAR},
+      areaname = #{areaname,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER},
+      online_status = #{onlineStatus,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=BIGINT},
+      pay_strategy_id = #{payStrategyId,jdbcType=BIGINT},
+      charge_time_id = #{chargeTimeId,jdbcType=INTEGER},
+      encryption = #{encryption,jdbcType=INTEGER},
+      private_key = #{privateKey,jdbcType=VARCHAR},
+      public_key = #{publicKey,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      bind_time = #{bindTime,jdbcType=TIMESTAMP},
+      unbind_time = #{unbindTime,jdbcType=TIMESTAMP},
+      overtime = #{overtime,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      alipay_code = #{alipayCode,jdbcType=VARCHAR},
+      device_type_id = #{deviceTypeId,jdbcType=INTEGER},
+      settle_type_id = #{settleTypeId,jdbcType=BIGINT},
+      alipay_code_flag = #{alipayCodeFlag,jdbcType=INTEGER},
+      debug_flag = #{debugFlag,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=BIGINT},
+      hardware = #{hardware,jdbcType=INTEGER},
+      start_run_time = #{startRunTime,jdbcType=TIMESTAMP},
+      monthly_charge = #{monthlyCharge,jdbcType=INTEGER},
+      ic_order_flag = #{icOrderFlag,jdbcType=INTEGER},
+      produce_user_id = #{produceUserId,jdbcType=BIGINT},
+      notify_offline_flag = #{notifyOfflineFlag,jdbcType=INTEGER},
+      notify_offline_time = #{notifyOfflineTime,jdbcType=TIMESTAMP},
+      aliyun = #{aliyun,jdbcType=VARCHAR},
+      ccid = #{ccid,jdbcType=VARCHAR},
+      ccid_flag = #{ccidFlag,jdbcType=INTEGER},
+      min_power = #{minPower,jdbcType=INTEGER},
+      max_power = #{maxPower,jdbcType=INTEGER},
+      min_power_time = #{minPowerTime,jdbcType=INTEGER},
+      version = #{version,jdbcType=VARCHAR},
+      lock_status = #{lockStatus,jdbcType=TINYINT},
+      manu_id = #{manuId,jdbcType=INTEGER},
+      agent_id = #{agentId,jdbcType=INTEGER},
+      saler_id = #{salerId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

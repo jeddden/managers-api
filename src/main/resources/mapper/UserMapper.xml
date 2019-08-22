@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="dao.UserMapper">
-  <resultMap id="BaseResultMap" type="User">
+<mapper namespace="com.yunku.demo.core.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.yunku.demo.core.model.User">
     <id column="id" jdbcType="SMALLINT" property="id" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="loginname" jdbcType="VARCHAR" property="loginname" />
@@ -30,6 +30,7 @@
     <result column="bank_num" jdbcType="VARCHAR" property="bankNum" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -93,9 +94,9 @@
     id, parent_id, loginname, `name`, `password`, encrypt, sex, age, usertype, isdefault, 
     `state`, createdatetime, server_id, server_id_h5, alipay_server_id, client_fans_id, 
     user_fans_id, is_binding, amount, withdrawal_amount, is_content_user, is_delete, 
-    agent_id, is_agent_admin, bank_id, bank_num, mobile, email
+    agent_id, is_agent_admin, bank_id, bank_num, mobile, email, openid
   </sql>
-  <select id="selectByExample" parameterType="UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.yunku.demo.core.model.example.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -119,13 +120,13 @@
     delete from t_user
     where id = #{id,jdbcType=SMALLINT}
   </delete>
-  <delete id="deleteByExample" parameterType="UserExample">
+  <delete id="deleteByExample" parameterType="com.yunku.demo.core.model.example.UserExample">
     delete from t_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="User" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.User" useGeneratedKeys="true">
     insert into t_user (parent_id, loginname, `name`, 
       `password`, encrypt, sex, 
       age, usertype, isdefault, 
@@ -134,8 +135,8 @@
       user_fans_id, is_binding, amount, 
       withdrawal_amount, is_content_user, is_delete, 
       agent_id, is_agent_admin, bank_id, 
-      bank_num, mobile, email
-      )
+      bank_num, mobile, email, 
+      openid)
     values (#{parentId,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{encrypt,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
       #{age,jdbcType=TINYINT}, #{usertype,jdbcType=TINYINT}, #{isdefault,jdbcType=TINYINT}, 
@@ -144,10 +145,10 @@
       #{userFansId,jdbcType=BIGINT}, #{isBinding,jdbcType=INTEGER}, #{amount,jdbcType=BIGINT}, 
       #{withdrawalAmount,jdbcType=BIGINT}, #{isContentUser,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, 
       #{agentId,jdbcType=INTEGER}, #{isAgentAdmin,jdbcType=INTEGER}, #{bankId,jdbcType=INTEGER}, 
-      #{bankNum,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}
-      )
+      #{bankNum,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{openid,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="User" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.User" useGeneratedKeys="true">
     insert into t_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="parentId != null">
@@ -230,6 +231,9 @@
       </if>
       <if test="email != null">
         email,
+      </if>
+      <if test="openid != null">
+        openid,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -314,9 +318,12 @@
       <if test="email != null">
         #{email,jdbcType=VARCHAR},
       </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="UserExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.yunku.demo.core.model.example.UserExample" resultType="java.lang.Long">
     select count(*) from t_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -409,6 +416,9 @@
       <if test="record.email != null">
         email = #{record.email,jdbcType=VARCHAR},
       </if>
+      <if test="record.openid != null">
+        openid = #{record.openid,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -443,12 +453,13 @@
       bank_id = #{record.bankId,jdbcType=INTEGER},
       bank_num = #{record.bankNum,jdbcType=VARCHAR},
       mobile = #{record.mobile,jdbcType=VARCHAR},
-      email = #{record.email,jdbcType=VARCHAR}
+      email = #{record.email,jdbcType=VARCHAR},
+      openid = #{record.openid,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="User">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunku.demo.core.model.User">
     update t_user
     <set>
       <if test="parentId != null">
@@ -532,10 +543,13 @@
       <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
       </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=SMALLINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="User">
+  <update id="updateByPrimaryKey" parameterType="com.yunku.demo.core.model.User">
     update t_user
     set parent_id = #{parentId,jdbcType=INTEGER},
       loginname = #{loginname,jdbcType=VARCHAR},
@@ -563,7 +577,17 @@
       bank_id = #{bankId,jdbcType=INTEGER},
       bank_num = #{bankNum,jdbcType=VARCHAR},
       mobile = #{mobile,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR}
+      email = #{email,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=SMALLINT}
   </update>
+
+  <!-- userMapperj -->
+  <select id="seekByAccount" resultMap="BaseResultMap">
+    SELECT * FROM t_user WHERE t_user.loginname = #{account}
+  </select>
+
+  <select id="getByOpenid" resultMap="BaseResultMap">
+    SELECT * FROM t_user WHERE t_user.openid = #{openid}
+  </select>
 </mapper>

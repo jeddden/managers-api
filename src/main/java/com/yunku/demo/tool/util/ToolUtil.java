@@ -1,7 +1,7 @@
 package com.yunku.demo.tool.util;
 
 
-import com.yunku.demo.common.exception.CoreExceptionEnum;
+import com.yunku.demo.common.constant.ResponseStatusEnum;
 import com.yunku.demo.common.exception.ServiceException;
 
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class ToolUtil {
 
             return md5StrBuff.toString();
         } catch (Exception var5) {
-            throw new ServiceException(CoreExceptionEnum.ENCRYPT_ERROR);
+            throw new ServiceException(ResponseStatusEnum.ENCRYPT_ERROR);
         }
     }
 

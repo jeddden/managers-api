@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunku.demo.core.dao.AccessMapper">
+  <resultMap id="BaseResultMap" type="com.yunku.demo.core.model.Access">
+    <id column="id" jdbcType="SMALLINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="pid" jdbcType="SMALLINT" property="pid" />
+    <result column="seq" jdbcType="TINYINT" property="seq" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="accesstype" jdbcType="TINYINT" property="accesstype" />
+    <result column="createdatetime" jdbcType="TIMESTAMP" property="createdatetime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, `name`, url, description, icon, pid, seq, `state`, accesstype, createdatetime
+  </sql>
+  <select id="selectByExample" parameterType="com.yunku.demo.core.model.example.AccessExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_access
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_access
+    where id = #{id,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from t_access
+    where id = #{id,jdbcType=SMALLINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yunku.demo.core.model.example.AccessExample">
+    delete from t_access
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.Access" useGeneratedKeys="true">
+    insert into t_access (`name`, url, description, 
+      icon, pid, seq, `state`, 
+      accesstype, createdatetime)
+    values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{pid,jdbcType=SMALLINT}, #{seq,jdbcType=TINYINT}, #{state,jdbcType=TINYINT}, 
+      #{accesstype,jdbcType=TINYINT}, #{createdatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.Access" useGeneratedKeys="true">
+    insert into t_access
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+      <if test="accesstype != null">
+        accesstype,
+      </if>
+      <if test="createdatetime != null">
+        createdatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=SMALLINT},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="accesstype != null">
+        #{accesstype,jdbcType=TINYINT},
+      </if>
+      <if test="createdatetime != null">
+        #{createdatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yunku.demo.core.model.example.AccessExample" resultType="java.lang.Long">
+    select count(*) from t_access
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_access
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=SMALLINT},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.icon != null">
+        icon = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=SMALLINT},
+      </if>
+      <if test="record.seq != null">
+        seq = #{record.seq,jdbcType=TINYINT},
+      </if>
+      <if test="record.state != null">
+        `state` = #{record.state,jdbcType=TINYINT},
+      </if>
+      <if test="record.accesstype != null">
+        accesstype = #{record.accesstype,jdbcType=TINYINT},
+      </if>
+      <if test="record.createdatetime != null">
+        createdatetime = #{record.createdatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_access
+    set id = #{record.id,jdbcType=SMALLINT},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      icon = #{record.icon,jdbcType=VARCHAR},
+      pid = #{record.pid,jdbcType=SMALLINT},
+      seq = #{record.seq,jdbcType=TINYINT},
+      `state` = #{record.state,jdbcType=TINYINT},
+      accesstype = #{record.accesstype,jdbcType=TINYINT},
+      createdatetime = #{record.createdatetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunku.demo.core.model.Access">
+    update t_access
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=SMALLINT},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="accesstype != null">
+        accesstype = #{accesstype,jdbcType=TINYINT},
+      </if>
+      <if test="createdatetime != null">
+        createdatetime = #{createdatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunku.demo.core.model.Access">
+    update t_access
+    set `name` = #{name,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=SMALLINT},
+      seq = #{seq,jdbcType=TINYINT},
+      `state` = #{state,jdbcType=TINYINT},
+      accesstype = #{accesstype,jdbcType=TINYINT},
+      createdatetime = #{createdatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=SMALLINT}
+  </update>
+
+  <!-- accessMapperj -->
+  <select id="getAllIdentifier" resultType="java.lang.Long">
+    SELECT ${id}
+    UNION
+    SELECT id FROM `t_access` WHERE pid= ${id}
+    UNION
+    SELECT id FROM `t_access` WHERE pid IN (select id FROM `t_access` WHERE pid = ${id})
+  </select>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select a.* from t_access a
+	left join t_role_access ra on ra.access_id = a.id
+		left join t_user_role ur on ur.role_id = ra.role_id
+			where ur.user_id = ${userId}
+
+  </select>
+</mapper>

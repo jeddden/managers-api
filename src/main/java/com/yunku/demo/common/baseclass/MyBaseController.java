@@ -1,21 +1,28 @@
 package com.yunku.demo.common.baseclass;
 
 
-import com.yunku.demo.common.respons.ResponseResult;
+import com.yunku.demo.common.constant.ResponseStatusEnum;
+import com.yunku.demo.common.respons.ErrorResponseData;
+import com.yunku.demo.common.respons.ResponseData;
+import com.yunku.demo.common.respons.SuccessResponseData;
+import com.yunku.demo.core.subject.SignUser;
+import com.yunku.demo.tool.MySubjectContext;
+
+import static com.yunku.demo.common.constant.ResponseStatusEnum.SERVICE_ERROR_DEFAULT;
 
 /**
  * @author Jeddden
  * @create 2019-06-25 13:42
  */
-public class MyBaseController  {
+public class MyBaseController extends BaseController {
 
     /**
      * 渲染失败数据
      *
      * @return result
      */
-    protected ResponseResult renderError() {
-        return ResponseResult.getFailResponseResult();
+    protected ResponseData renderServiceError() {
+        return new ErrorResponseData(SERVICE_ERROR_DEFAULT);
     }
 
     /**
@@ -24,10 +31,14 @@ public class MyBaseController  {
      * @param msg 需要返回的消息
      * @return result
      */
-    protected ResponseResult renderError(String msg) {
-        ResponseResult result = renderError();
-        result.setMessage(msg);
-        return result;
+    protected ResponseData renderError(String msg) {
+        return new ErrorResponseData(msg);
+    }
+
+
+
+    protected ResponseData renderError(ResponseStatusEnum responseStatusEnum) {
+        return new ErrorResponseData(responseStatusEnum);
     }
 
     /**
@@ -35,8 +46,8 @@ public class MyBaseController  {
      *
      * @return result
      */
-    protected ResponseResult renderSuccess() {
-        return ResponseResult.getSuccessResponseResult();
+    protected ResponseData renderSuccess() {
+        return new SuccessResponseData();
     }
 
     /**
@@ -45,10 +56,8 @@ public class MyBaseController  {
      * @param msg 需要返回的信息
      * @return result
      */
-    protected ResponseResult renderSuccess(String msg) {
-        ResponseResult result = renderSuccess();
-        result.setMessage(msg);
-        return result;
+    protected ResponseData renderSuccess(String msg) {
+        return new SuccessResponseData(msg);
     }
 
     /**
@@ -57,19 +66,25 @@ public class MyBaseController  {
      * @param obj 需要返回的对象
      * @return result
      */
-    protected ResponseResult renderSuccess(Object obj) {
-        ResponseResult result = renderSuccess();
-        result.setData(obj);
-        return result;
+    protected ResponseData renderSuccess(Object obj) {
+        return new SuccessResponseData(obj);
     }
 
     /**
-     * 通过token获取openId
+     * 获取SignUser
      *
      * @return result
      */
-//    protected ShiroUser getShiroUser() {
-//        return ShiroKit.getUser();
-//    }
+    protected SignUser getSignUser() {
+        return MySubjectContext.get();
+    }
 
+    /**
+     * 返回前端success=false 的responseData
+     * @param msg
+     * @return
+     */
+    protected ResponseData renderSuccessFalse(String msg) {
+        return new ResponseData(false, SuccessResponseData.DEFAULT_SUCCESS_CODE, msg, null);
+    }
 }

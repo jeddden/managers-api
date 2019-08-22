@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunku.demo.core.dao.AgentMapper">
+  <resultMap id="BaseResultMap" type="com.yunku.demo.core.model.Agent">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="agent_name" jdbcType="VARCHAR" property="agentName" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="agent_type" jdbcType="INTEGER" property="agentType" />
+    <result column="agent_num" jdbcType="VARCHAR" property="agentNum" />
+    <result column="vendor_num" jdbcType="VARCHAR" property="vendorNum" />
+    <result column="template_num" jdbcType="VARCHAR" property="templateNum" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="proportion" jdbcType="REAL" property="proportion" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, parent_id, agent_name, logo, intro, agent_type, agent_num, vendor_num, template_num, 
+    city, province, mobile, proportion, `status`, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yunku.demo.core.model.AgentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_agent
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_agent
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_agent
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yunku.demo.core.model.AgentExample">
+    delete from t_agent
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.Agent" useGeneratedKeys="true">
+    insert into t_agent (parent_id, agent_name, logo, 
+      intro, agent_type, agent_num, 
+      vendor_num, template_num, city, 
+      province, mobile, proportion, 
+      `status`, create_time)
+    values (#{parentId,jdbcType=INTEGER}, #{agentName,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
+      #{intro,jdbcType=VARCHAR}, #{agentType,jdbcType=INTEGER}, #{agentNum,jdbcType=VARCHAR}, 
+      #{vendorNum,jdbcType=VARCHAR}, #{templateNum,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{proportion,jdbcType=REAL}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.Agent" useGeneratedKeys="true">
+    insert into t_agent
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="agentName != null">
+        agent_name,
+      </if>
+      <if test="logo != null">
+        logo,
+      </if>
+      <if test="intro != null">
+        intro,
+      </if>
+      <if test="agentType != null">
+        agent_type,
+      </if>
+      <if test="agentNum != null">
+        agent_num,
+      </if>
+      <if test="vendorNum != null">
+        vendor_num,
+      </if>
+      <if test="templateNum != null">
+        template_num,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="proportion != null">
+        proportion,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="agentName != null">
+        #{agentName,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="intro != null">
+        #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="agentType != null">
+        #{agentType,jdbcType=INTEGER},
+      </if>
+      <if test="agentNum != null">
+        #{agentNum,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorNum != null">
+        #{vendorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="templateNum != null">
+        #{templateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="proportion != null">
+        #{proportion,jdbcType=REAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yunku.demo.core.model.AgentExample" resultType="java.lang.Long">
+    select count(*) from t_agent
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_agent
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentId != null">
+        parent_id = #{record.parentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.agentName != null">
+        agent_name = #{record.agentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logo != null">
+        logo = #{record.logo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.intro != null">
+        intro = #{record.intro,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agentType != null">
+        agent_type = #{record.agentType,jdbcType=INTEGER},
+      </if>
+      <if test="record.agentNum != null">
+        agent_num = #{record.agentNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendorNum != null">
+        vendor_num = #{record.vendorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.templateNum != null">
+        template_num = #{record.templateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null">
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.proportion != null">
+        proportion = #{record.proportion,jdbcType=REAL},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_agent
+    set id = #{record.id,jdbcType=INTEGER},
+      parent_id = #{record.parentId,jdbcType=INTEGER},
+      agent_name = #{record.agentName,jdbcType=VARCHAR},
+      logo = #{record.logo,jdbcType=VARCHAR},
+      intro = #{record.intro,jdbcType=VARCHAR},
+      agent_type = #{record.agentType,jdbcType=INTEGER},
+      agent_num = #{record.agentNum,jdbcType=VARCHAR},
+      vendor_num = #{record.vendorNum,jdbcType=VARCHAR},
+      template_num = #{record.templateNum,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      proportion = #{record.proportion,jdbcType=REAL},
+      `status` = #{record.status,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunku.demo.core.model.Agent">
+    update t_agent
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="agentName != null">
+        agent_name = #{agentName,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        logo = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="intro != null">
+        intro = #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="agentType != null">
+        agent_type = #{agentType,jdbcType=INTEGER},
+      </if>
+      <if test="agentNum != null">
+        agent_num = #{agentNum,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorNum != null">
+        vendor_num = #{vendorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="templateNum != null">
+        template_num = #{templateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="proportion != null">
+        proportion = #{proportion,jdbcType=REAL},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunku.demo.core.model.Agent">
+    update t_agent
+    set parent_id = #{parentId,jdbcType=INTEGER},
+      agent_name = #{agentName,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR},
+      intro = #{intro,jdbcType=VARCHAR},
+      agent_type = #{agentType,jdbcType=INTEGER},
+      agent_num = #{agentNum,jdbcType=VARCHAR},
+      vendor_num = #{vendorNum,jdbcType=VARCHAR},
+      template_num = #{templateNum,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      proportion = #{proportion,jdbcType=REAL},
+      `status` = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!-- agentMapper -->
+  <select id="selectAgentsById" resultMap="BaseResultMap">
+        SELECT * FROM `t_agent` WHERE id = ${id}
+        UNION SELECT * FROM t_agent WHERE parent_id = ${id}
+        UNION SELECT * FROM t_agent WHERE parent_id in
+        (SELECT id FROM t_agent WHERE parent_id = ${id})
+
+  </select>
+</mapper>

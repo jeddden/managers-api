@@ -24,7 +24,7 @@ public class DruidProperties {
     private Boolean poolPreparedStatements = true;
     private Boolean useGlobalDataSourceStat = true;
     private Integer maxPoolPreparedStatementPerConnectionSize = 20;
-    private String filters = "stat,wall,sl4j,config";
+    private String filters = "stat,wall,slf4j,config";
 //    private Properties connectionProperties = new Properties();
 
     public void config(DruidDataSource dataSource) {

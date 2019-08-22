@@ -1,35 +1,47 @@
 package com.yunku.demo.common.exception;
 
 
+import com.yunku.demo.common.constant.ResponseStatusEnum;
+
 public class ServiceException extends RuntimeException {
-    private Integer code;
-    private String errorMessage;
 
-    public ServiceException(Integer code, String errorMessage) {
-        super(errorMessage);
+    private int code;
+
+    public ServiceException() {
+    }
+
+    public ServiceException(String message) {
+        super(message);
+    }
+
+    public ServiceException(Throwable cause) {
+        super(cause);
+    }
+
+    public ServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ServiceException(int code, String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ServiceException(ResponseStatusEnum responseStatusEnum) {
+        super(responseStatusEnum.getInfo());
+        this.code = responseStatusEnum.getCode();
+    }
+
+    public ServiceException(int code, String message) {
+        super(message);
         this.code = code;
-        this.errorMessage = errorMessage;
     }
 
-    public ServiceException(AbstractBaseExceptionEnum exception) {
-        super(exception.getMessage());
-        this.code = exception.getCode();
-        this.errorMessage = exception.getMessage();
+    public int getCode() {
+        return code;
     }
 
-    public Integer getCode() {
-        return this.code;
-    }
-
-    public void setCode(Integer code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    public String getErrorMessage() {
-        return this.errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
 }

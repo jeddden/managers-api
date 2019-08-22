@@ -53,4 +53,15 @@ public class MiniOauth2Token {
     public void setErrmsg(String errmsg) {
         this.errmsg = errmsg;
     }
+
+    @Override
+    public String toString() {
+        return "MiniOauth2Token{" +
+                "openid='" + openid + '\'' +
+                ", sessionKey='" + sessionKey + '\'' +
+                ", unionid='" + unionid + '\'' +
+                ", errcode=" + errcode +
+                ", errmsg='" + errmsg + '\'' +
+                '}';
+    }
 }

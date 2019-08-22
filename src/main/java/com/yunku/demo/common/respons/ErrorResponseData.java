@@ -1,5 +1,7 @@
 package com.yunku.demo.common.respons;
 
+import com.yunku.demo.common.constant.ResponseStatusEnum;
+
 /**
  * @author Jeddden
  * @create 2019-06-14 17:27
@@ -7,12 +9,16 @@ package com.yunku.demo.common.respons;
 public class ErrorResponseData extends ResponseData {
     private String exceptionClazz;
 
+    public ErrorResponseData(ResponseStatusEnum statusEnum) {
+        super(false, statusEnum.getCode(), statusEnum.getInfo(), null);
+    }
+
     public ErrorResponseData(String message) {
-        super(false, ResponseData.DEFAULT_ERROR_CODE, message, (Object)null);
+        super(false, ResponseData.DEFAULT_ERROR_CODE, message, (Object) null);
     }
 
     public ErrorResponseData(Integer code, String message) {
-        super(false, code, message, (Object)null);
+        super(false, code, message, (Object) null);
     }
 
     public ErrorResponseData(Integer code, String message, Object object) {
@@ -34,7 +40,7 @@ public class ErrorResponseData extends ResponseData {
         } else if (!(o instanceof ErrorResponseData)) {
             return false;
         } else {
-            ErrorResponseData other = (ErrorResponseData)o;
+            ErrorResponseData other = (ErrorResponseData) o;
             if (!other.canEqual(this)) {
                 return false;
             } else {
@@ -69,6 +75,6 @@ public class ErrorResponseData extends ResponseData {
 
     @Override
     public String toString() {
-        return "ErrorResponseData(exceptionClazz=" + this.getExceptionClazz() + ")";
+        return  "ErrorResponseData(exceptionClazz=" + this.getExceptionClazz() + ")" +super.toString();
     }
 }

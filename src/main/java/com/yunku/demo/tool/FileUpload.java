@@ -1,7 +1,7 @@
 package com.yunku.demo.tool;
 
-import com.yunku.demo.common.exception.CoreExceptionEnum;
-import com.yunku.demo.common.exception.MyServiceException;
+import com.yunku.demo.common.constant.ResponseStatusEnum;
+import com.yunku.demo.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,7 +60,7 @@ public class FileUpload {
 //            return "文件上传失败,失败原因" + e.getMessage();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new MyServiceException(CoreExceptionEnum.IO_ERROR);
+            throw new ServiceException(ResponseStatusEnum.IO_ERROR);
 //            return "文件上传失败,失败原因" + e.getMessage();
         }
         // 完整的url
