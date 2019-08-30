@@ -11,4 +11,6 @@ import com.yunku.demo.core.model.Device;
 public interface DeviceService {
 
     Device fetchById(Integer id);
+
+    Device fetchByCode(String deviceCode);
 }

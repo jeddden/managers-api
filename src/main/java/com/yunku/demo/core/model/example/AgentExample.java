@@ -1,4 +1,4 @@
-package com.yunku.demo.core.model;
+package com.yunku.demo.core.model.example;
 
 import java.util.ArrayList;
 import java.util.Date;

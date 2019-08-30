@@ -80,7 +80,7 @@
     id, parent_id, agent_name, logo, intro, agent_type, agent_num, vendor_num, template_num, 
     city, province, mobile, proportion, `status`, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.yunku.demo.core.model.AgentExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.yunku.demo.core.model.example.AgentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -104,7 +104,7 @@
     delete from t_agent
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.yunku.demo.core.model.AgentExample">
+  <delete id="deleteByExample" parameterType="com.yunku.demo.core.model.example.AgentExample">
     delete from t_agent
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -213,7 +213,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.yunku.demo.core.model.AgentExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.yunku.demo.core.model.example.AgentExample" resultType="java.lang.Long">
     select count(*) from t_agent
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

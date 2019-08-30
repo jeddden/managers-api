@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunku.demo.core.dao.DeviceOperatingLogMapper">
+  <resultMap id="BaseResultMap" type="com.yunku.demo.core.model.DeviceOperatingLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="device_code" jdbcType="VARCHAR" property="deviceCode" />
+    <result column="device_id" jdbcType="BIGINT" property="deviceId" />
+    <result column="port" jdbcType="TINYINT" property="port" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="operation" jdbcType="VARCHAR" property="operation" />
+    <result column="secceed" jdbcType="VARCHAR" property="secceed" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, device_code, device_id, port, operator_name, operator_id, `method`, `operation`, 
+    secceed, message, create_time, `location`
+  </sql>
+  <select id="selectByExample" parameterType="com.yunku.demo.core.model.example.DeviceOperatingLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_device_operating_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_device_operating_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_device_operating_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yunku.demo.core.model.example.DeviceOperatingLogExample">
+    delete from t_device_operating_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.DeviceOperatingLog" useGeneratedKeys="true">
+    insert into t_device_operating_log (device_code, device_id, port, 
+      operator_name, operator_id, `method`, 
+      `operation`, secceed, message, 
+      create_time, `location`)
+    values (#{deviceCode,jdbcType=VARCHAR}, #{deviceId,jdbcType=BIGINT}, #{port,jdbcType=TINYINT}, 
+      #{operatorName,jdbcType=VARCHAR}, #{operatorId,jdbcType=INTEGER}, #{method,jdbcType=VARCHAR}, 
+      #{operation,jdbcType=VARCHAR}, #{secceed,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{location,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yunku.demo.core.model.DeviceOperatingLog" useGeneratedKeys="true">
+    insert into t_device_operating_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deviceCode != null">
+        device_code,
+      </if>
+      <if test="deviceId != null">
+        device_id,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="operatorName != null">
+        operator_name,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="method != null">
+        `method`,
+      </if>
+      <if test="operation != null">
+        `operation`,
+      </if>
+      <if test="secceed != null">
+        secceed,
+      </if>
+      <if test="message != null">
+        message,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="location != null">
+        `location`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deviceCode != null">
+        #{deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=TINYINT},
+      </if>
+      <if test="operatorName != null">
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null">
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="secceed != null">
+        #{secceed,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yunku.demo.core.model.example.DeviceOperatingLogExample" resultType="java.lang.Long">
+    select count(*) from t_device_operating_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_device_operating_log
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.deviceCode != null">
+        device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceId != null">
+        device_id = #{record.deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.port != null">
+        port = #{record.port,jdbcType=TINYINT},
+      </if>
+      <if test="record.operatorName != null">
+        operator_name = #{record.operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatorId != null">
+        operator_id = #{record.operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.method != null">
+        `method` = #{record.method,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operation != null">
+        `operation` = #{record.operation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secceed != null">
+        secceed = #{record.secceed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.message != null">
+        message = #{record.message,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.location != null">
+        `location` = #{record.location,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_device_operating_log
+    set id = #{record.id,jdbcType=BIGINT},
+      device_code = #{record.deviceCode,jdbcType=VARCHAR},
+      device_id = #{record.deviceId,jdbcType=BIGINT},
+      port = #{record.port,jdbcType=TINYINT},
+      operator_name = #{record.operatorName,jdbcType=VARCHAR},
+      operator_id = #{record.operatorId,jdbcType=INTEGER},
+      `method` = #{record.method,jdbcType=VARCHAR},
+      `operation` = #{record.operation,jdbcType=VARCHAR},
+      secceed = #{record.secceed,jdbcType=VARCHAR},
+      message = #{record.message,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      `location` = #{record.location,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunku.demo.core.model.DeviceOperatingLog">
+    update t_device_operating_log
+    <set>
+      <if test="deviceCode != null">
+        device_code = #{deviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=TINYINT},
+      </if>
+      <if test="operatorName != null">
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="method != null">
+        `method` = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null">
+        `operation` = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="secceed != null">
+        secceed = #{secceed,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null">
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null">
+        `location` = #{location,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunku.demo.core.model.DeviceOperatingLog">
+    update t_device_operating_log
+    set device_code = #{deviceCode,jdbcType=VARCHAR},
+      device_id = #{deviceId,jdbcType=BIGINT},
+      port = #{port,jdbcType=TINYINT},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      operator_id = #{operatorId,jdbcType=INTEGER},
+      `method` = #{method,jdbcType=VARCHAR},
+      `operation` = #{operation,jdbcType=VARCHAR},
+      secceed = #{secceed,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `location` = #{location,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--  deviceOperatingLogMapperj -->
+
+  <select id="selectTemHistoryByUserId" resultMap="BaseResultMap">
+   SELECT device_id ,device_code,location,operator_id,operator_name,create_time FROM t_device_operating_log  WHERE operator_id = ${userId}
+GROUP BY device_id HAVING Max(create_time) ORDER BY create_time DESC
+  </select>
+</mapper>

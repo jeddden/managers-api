@@ -133,6 +133,29 @@ public class Device implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+//-----------------------------------------------------------------------------------------------------------
+
+    private String location;
+
+    private Integer type;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+//-----------------------------------------------------------------------------------------------------------
+
     public Integer getId() {
         return id;
     }

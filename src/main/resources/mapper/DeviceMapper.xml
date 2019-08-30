@@ -834,4 +834,19 @@
       saler_id = #{salerId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- devicemapperj -->
+  <resultMap id="deviceLocation" type="com.yunku.demo.core.model.Device" extends="BaseResultMap">
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="type" jdbcType="INTEGER" property="type"/>
+  </resultMap>
+  <select id="selectDeviceByCode" resultMap="deviceLocation">
+    select t_device.id,t_device.name,t_device.device_code,t_device.user_id
+    ,t_device.manu_id,t_device.agent_id,t_device.saler_id,t_device_position.location ,
+    tdp.type
+    from t_device
+    right join t_device_type as tdp on tdp.id = t_device.device_type_id
+    left join t_device_position on t_device.id = t_device_position.device_id
+    where t_device.device_code = #{deviceCode}
+  </select>
 </mapper>

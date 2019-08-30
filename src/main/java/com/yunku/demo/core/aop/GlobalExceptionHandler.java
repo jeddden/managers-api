@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
      * 拦截业务异常
      */
     @ExceptionHandler(ServiceException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public ErrorResponseData bussiness(ServiceException e) {
 //        LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));

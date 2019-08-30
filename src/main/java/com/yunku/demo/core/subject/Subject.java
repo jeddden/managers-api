@@ -68,7 +68,7 @@ public interface Subject  {
      * 是否是生产商
      * @return
      */
-    Boolean isManufacturer();
+    Boolean isManufacturer(SignUser user);
 
     /**
      * 是否是商户管理员

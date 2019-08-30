@@ -1,7 +1,7 @@
 package com.yunku.demo.core.dao;
 
 import com.yunku.demo.core.model.Agent;
-import com.yunku.demo.core.model.AgentExample;
+import com.yunku.demo.core.model.example.AgentExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

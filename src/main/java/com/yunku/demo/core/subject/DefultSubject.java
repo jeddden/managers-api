@@ -111,8 +111,8 @@ public class DefultSubject implements Subject {
     }
 
     @Override
-    public Boolean isManufacturer() {
-        return null;
+    public Boolean isManufacturer(SignUser user) {
+        return user.getAgentId() == null ? false : user.getAgentId() == 0;
     }
 
     @Override
@@ -135,6 +135,7 @@ public class DefultSubject implements Subject {
 //        }
         throw new AuthenticationException("No login permissions");
     }
+
 
     private SignUser signPackage(User user) {
         SignUser signUser = SignUser.toSignUser(user);

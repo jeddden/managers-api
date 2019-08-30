@@ -3,12 +3,14 @@ package com.yunku.demo.tool.iot;
 import com.alibaba.fastjson.JSONObject;
 import com.yunku.demo.config.IotConfig;
 import com.yunku.demo.tool.SpringContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
 public class InvokeDeviceUtil {
 
-//    private static String iotBridgeUrl = PropertiesUtil.getInstance().getProperties("iot_bridge_url");
+    private static final Logger logger = LoggerFactory.getLogger(InvokeDeviceUtil.class);
 
     public static JSONObject invokeDevice(String actionId, String deviceCode, JSONObject data) throws Exception {
         JSONObject params = new JSONObject();
@@ -28,7 +30,7 @@ public class InvokeDeviceUtil {
                 return jData;
             } else { //服务异常
                 String rtnMessage = ret.getString("rtnMessage");
-                System.out.println("actionId服务调用异常，原因:" + rtnMessage);
+                logger.error("actionId服务调用异常，原因:" + rtnMessage);
                 throw new Exception(rtnMessage);
             }
         }
@@ -47,7 +49,7 @@ public class InvokeDeviceUtil {
                 return jData;
             } else { //服务异常
                 String rtnMessage = ret.getString("rtnMessage");
-                System.out.println("CloudManageDeviceLifeReq服务调用异常，原因:" + rtnMessage);
+                logger.error("CloudManageDeviceLifeReq服务调用异常，原因:" + rtnMessage);
                 throw new Exception(rtnMessage);
             }
         }

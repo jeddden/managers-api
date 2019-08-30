@@ -31,7 +31,7 @@ public class IdWorker {
         if (this.lastTimestamp == timestamp) {
             this.sequence = (this.sequence + 1) & sequenceMask;
             if (this.sequence == 0) {
-                System.out.println("###########" + sequenceMask);
+//                System.out.println("###########" + sequenceMask);
                 timestamp = this.tilNextMillis(this.lastTimestamp);
             }
         } else {
@@ -51,9 +51,9 @@ public class IdWorker {
         this.lastTimestamp = timestamp;
         long nextId = ((timestamp - twepoch << timestampLeftShift))
                 | (this.workerId << workerIdShift) | (this.sequence);
-        System.out.println("timestamp:" + timestamp + ",timestampLeftShift:"
-                + timestampLeftShift + ",nextId:" + nextId + ",workerId:"
-                + workerId + ",sequence:" + sequence);
+//        System.out.println("timestamp:" + timestamp + ",timestampLeftShift:"
+//                + timestampLeftShift + ",nextId:" + nextId + ",workerId:"
+//                + workerId + ",sequence:" + sequence);
         return nextId;
     }
  

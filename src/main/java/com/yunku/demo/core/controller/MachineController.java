@@ -1,26 +1,23 @@
 package com.yunku.demo.core.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yunku.demo.common.Json;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.yunku.demo.common.MyPageInfo;
 import com.yunku.demo.common.baseclass.MyBaseController;
-import com.yunku.demo.common.exception.ServiceException;
 import com.yunku.demo.common.respons.ResponseData;
-import com.yunku.demo.core.model.Device;
-import com.yunku.demo.core.service.DeviceService;
-import com.yunku.demo.core.subject.SignUser;
-import com.yunku.demo.tool.iot.InvokeDeviceUtil;
+import com.yunku.demo.core.model.DeviceOperatingLog;
+import com.yunku.demo.core.service.DeviceOperatingLogService;
+import com.yunku.demo.core.service.IotService;
 import io.swagger.annotations.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
-
-import static com.yunku.demo.common.constant.ResponseStatusEnum.*;
 
 @RestController
 @Scope("prototype")
@@ -29,7 +26,10 @@ import static com.yunku.demo.common.constant.ResponseStatusEnum.*;
 public class MachineController extends MyBaseController {
 
     @Autowired
-    private DeviceService deviceService;
+    private IotService iotService;
+
+    @Autowired
+    private DeviceOperatingLogService deviceOperatingLogService;
 
     @ApiModel
     class ChargeStatus {
@@ -52,20 +52,6 @@ public class MachineController extends MyBaseController {
         public String doorStatus;
     }
 
-    @ApiModel
-    class History {
-        @ApiModelProperty(value = "设备号")
-        public String deviceCode;
-
-        @ApiModelProperty(value = "地址")
-        public String address;
-
-        @ApiModelProperty(value = "操作人")
-        public String opName;
-
-        @ApiModelProperty(value = "操作时间")
-        public Date opTime;
-    }
 
     @RequestMapping("/history")
     @ApiResponses(value = {
@@ -74,34 +60,34 @@ public class MachineController extends MyBaseController {
     })
     @ApiOperation(httpMethod = "POST", value = "历史记录", notes = "分页查询数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "页码，从1开始", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "rows", value = "每页显示记录数，默认50条", required = true, paramType = "form")
+            @ApiImplicitParam(name = "pageNum", value = "页码，从1开始", required = true, paramType = "form"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示记录数，默认20条", required = true, paramType = "form")
     })
-    public Json<List<History>> history(HttpServletRequest request) {
-        return null;
+    public ResponseData history(MyPageInfo pageInfo) {
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        List<DeviceOperatingLog> list = deviceOperatingLogService.selectByUserId(getSignUser().getId().intValue());
+        PageInfo<DeviceOperatingLog> data = new PageInfo<>(list);
+        return renderSuccess(data);
     }
 
-    @RequestMapping("/getDoorInfo/{id}")
+    @RequestMapping("/getDoorInfo/{deviceCode}")
     @ApiResponses(value = {
             @ApiResponse(code = 500, message = "系统错误"),
             @ApiResponse(code = 200, message = "操作成功")
     })
-    @ApiOperation(httpMethod = "GET", value = "读取门数据", notes = "")
+    @ApiOperation(httpMethod = "GET", value = "读取门数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "设备id号", required = true, paramType = "form")
+            @ApiImplicitParam(name = "deviceCode", value = "设备号", required = true, paramType = "form")
     })
-    public ResponseData getDoorInfo(@PathVariable("id") Integer deviceId) throws Exception {
-        SignUser signUser = getSignUser();
-        Device device = deviceService.fetchById(deviceId);
-        if (device == null) {
-            return this.renderError(REQUESTED_RESOURCE_NOT_EXIST);
+    public ResponseData getDoorInfo(@PathVariable("deviceCode") String deviceCode) throws Exception {
+        JSONObject jsonObject;
+        jsonObject = iotService.getDoorInfo(deviceCode);
+        Integer result = jsonObject.getInteger("result");
+        if (result != null && result.equals(0)) {
+            return this.renderSuccess(jsonObject.get("devPortSts"));
+        } else {
+            return this.renderError(jsonObject.toJSONString());
         }
-        JSONObject jsonObject = null;
-        if (signUser.getIsAgentAdmin() == 0 && !signUser.getAgentIdList().contains(device.getAgentId())) {
-            return this.renderError(OUT_OF_DATA_SCOPE);
-        }
-        jsonObject = InvokeDeviceUtil.invokeDevice("cloud-162", device.getDeviceCode(), null);
-        return this.renderSuccess(jsonObject);
     }
 
     @RequestMapping("/openDoor")
@@ -111,30 +97,22 @@ public class MachineController extends MyBaseController {
     })
     @ApiOperation(httpMethod = "POST", value = "开门")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceCode", value = "设备号", required = true, paramType = "form"),
+            @ApiImplicitParam(name = "port", value = "端口号", required = true, paramType = "form")
     })
-    public Object openDoor(Integer port, String deviceCode) {
-        Json j = new Json();
+    public ResponseData openDoor(Integer port, String deviceCode) {
         /*对设备发送指令开始充电*/
-        JSONObject Obj = null;
-        JSONObject data = new JSONObject();
-        data.put("orderId", 0);
-        data.put("port", port);
-        data.put("command", 3);
-        try {
-            Obj = InvokeDeviceUtil.invokeDevice("cloud-161", deviceCode, data);
-            Integer status = Obj.getInteger("status");
-            if (status == 0) {
-                j.setSuccess(true);
-                j.setMsg("开门成功");
-            } else {
-                j.setMsg("开门失败，请稍后再试！");
-            }
-        } catch (Exception e) {
-            j.setMsg("cloud-161服务调用异常，原因:" + e.getMessage());
-            e.printStackTrace();
-            System.out.println("cloud-161服务调用异常，原因:" + e.getMessage());
+        if (port == null || StringUtils.isEmpty(deviceCode)) {
+            return this.renderError("参数不能为空。");
         }
-        return Obj;
+        JSONObject jsonObject = iotService.openDoor(deviceCode, port);
+        Integer status = jsonObject.getInteger("code");
+        if (status != null && status.equals(0)) {
+            return renderSuccess("开门成功");
+        } else {
+            return renderError("开门失败，请稍后再试！");
+        }
+
     }
 
     @RequestMapping("/putBattery")
@@ -144,9 +122,21 @@ public class MachineController extends MyBaseController {
     })
     @ApiOperation(httpMethod = "POST", value = "放电池")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceCode", value = "设备号", required = true, paramType = "form"),
+            @ApiImplicitParam(name = "port", value = "端口号", required = true, paramType = "form")
     })
-    public Json putBattery(HttpServletRequest request) {
-        return null;
+    public ResponseData putBattery(String deviceCode, Integer port) {
+        if (port == null || StringUtils.isEmpty(deviceCode)) {
+            return this.renderError("参数不能为空。");
+        }
+        /*对设备发送指令开始充电*/
+        JSONObject jsonObject = iotService.putBattery(deviceCode, port);
+        Integer status = jsonObject.getInteger("code");
+        if (status != null && status.equals(0)) {
+            return renderSuccess("放入电池");
+        } else {
+            return renderError("放电池失败，请稍后再试！");
+        }
     }
 
     @RequestMapping("/startCharge")
@@ -156,30 +146,20 @@ public class MachineController extends MyBaseController {
     })
     @ApiOperation(httpMethod = "POST", value = "充电")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceCode", value = "设备号", required = true, paramType = "form"),
+            @ApiImplicitParam(name = "port", value = "端口号", required = true, paramType = "form")
     })
     public ResponseData startCharge(Integer port, String deviceCode) {
-        Json j = new Json();
-        /*对设备发送指令开始充电*/
-        JSONObject Obj = null;
-        JSONObject data = new JSONObject();
-        data.put("orderId", 0);
-        data.put("port", port);
-        data.put("command", 8);
-        try {
-            Obj = InvokeDeviceUtil.invokeDevice("cloud-161", deviceCode, data);
-            Integer status = Obj.getInteger("status");
-            if (status == 0) {
-                j.setSuccess(true);
-                j.setMsg("开始充电成功");
-            } else {
-                j.setMsg("开始充电失败，请稍后再试！");
-            }
-        } catch (Exception e) {
-            j.setMsg("cloud-161服务调用异常，原因:" + e.getMessage());
-            e.printStackTrace();
-            System.out.println("cloud-161服务调用异常，原因:" + e.getMessage());
+        if (port == null || StringUtils.isEmpty(deviceCode)) {
+            return this.renderError("参数不能为空。");
         }
-        return renderSuccess(Obj);
+        JSONObject jsonObject = iotService.startCharge(deviceCode, port);
+        Integer status = jsonObject.getInteger("code");
+        if (status != null && status.equals(0)) {
+            return renderSuccess("开始充电");
+        } else {
+            return renderError("操作失败，请稍后再试！");
+        }
     }
 
     @RequestMapping("/stopCharge")
@@ -189,30 +169,20 @@ public class MachineController extends MyBaseController {
     })
     @ApiOperation(httpMethod = "POST", value = "断电")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceCode", value = "设备号", required = true, paramType = "form"),
+            @ApiImplicitParam(name = "port", value = "端口号", required = true, paramType = "form")
     })
     public ResponseData stopCharge(Integer port, String deviceCode) {
-        Json j = new Json();
-        /*对设备发送指令开始充电*/
-        JSONObject Obj = null;
-        JSONObject data = new JSONObject();
-        data.put("orderId", 0);
-        data.put("port", port);
-        data.put("command", 1);
-        try {
-            Obj = InvokeDeviceUtil.invokeDevice("cloud-161", deviceCode, data);
-            Integer status = Obj.getInteger("status");
-            if (status == 0) {
-                j.setSuccess(true);
-                j.setMsg("充电成功");
-            } else {
-                j.setMsg("充电失败，请稍后再试！");
-            }
-        } catch (Exception e) {
-            j.setMsg("cloud-161服务调用异常，原因:" + e.getMessage());
-            e.printStackTrace();
-            System.out.println("cloud-161服务调用异常，原因:" + e.getMessage());
+        if (port == null || StringUtils.isEmpty(deviceCode)) {
+            return this.renderError("参数不能为空。");
         }
-        return this.renderSuccess(Obj);
+        JSONObject jsonObject = iotService.stopCharge(deviceCode, port);
+        Integer status = jsonObject.getInteger("code");
+        if (status != null && status.equals(0)) {
+            return renderSuccess("停止充电");
+        } else {
+            return renderError("操作失败，请稍后再试！");
+        }
     }
 
     @RequestMapping("/readData")
@@ -220,21 +190,64 @@ public class MachineController extends MyBaseController {
             @ApiResponse(code = 500, message = "系统错误"),
             @ApiResponse(code = 200, message = "操作成功")
     })
-    @ApiOperation(httpMethod = "POST", value = "实时读取设备数据", notes = "")
+    @ApiOperation(httpMethod = "POST", value = "实时读取设备数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "设备id号", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "index", value = "门id", required = true, paramType = "form")
+            @ApiImplicitParam(name = "deviceCode", value = "设备号", required = true, paramType = "form")
     })
     public ResponseData readData(String deviceCode) {
-        JSONObject object = null;
-        try {
-            object = InvokeDeviceUtil.invokeDevice("cloud-168",deviceCode,null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServiceException(REMOTE_SERVICE_FAILURE);
+        if (StringUtils.isEmpty(deviceCode)) {
+            return this.renderError("参数不能为空。");
         }
-        return renderSuccess(object);
+        JSONObject object;
+        object = iotService.readData(deviceCode);
+        Integer result = object.getInteger("result");
+        if (result != null && result.equals(0)) {
+            return renderSuccess(object.get("devPortChargeSts"));
+        } else {
+            return renderError(object.toJSONString());
+        }
     }
 
+    @RequestMapping("/readPortInfor")
+    @ApiResponses(value = {
+            @ApiResponse(code = 500, message = "系统错误"),
+            @ApiResponse(code = 200, message = "操作成功")
+    })
+    @ApiOperation(httpMethod = "POST", value = "实时读取设备数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceCode", value = "设备号", required = true, paramType = "form"),
+            @ApiImplicitParam(name = "port", value = "端口号", required = true, paramType = "form")
+    })
+    public ResponseData readPortInfor(String deviceCode, Integer port) {
+        if (StringUtils.isEmpty(deviceCode) || port == null) {
+            return this.renderError("参数不能为空。");
+        }
+        JSONObject object;
+        object = iotService.readPortInfor(deviceCode, port);
+        return this.renderSuccess(object);
+//        Integer result = object.getInteger("result");
+//        if (result != null && result.equals(0)) {
+//            return renderSuccess(object.get("devPortChargeSts"));
+//        } else {
+//            return renderError(object.toJSONString());
+//        }
+    }
+
+//    @RequestMapping("testOpen")
+//    @ResponseBody
+//    public ResponseData testOpenDoor(String deviceCode,Integer port){
+//        JSONObject Obj = null;
+//        JSONObject data = new JSONObject();
+//        data.put("orderId", 0);
+//        data.put("port", port);
+//        data.put("command", 3);
+//        try {
+//            Obj = InvokeDeviceUtil.invokeDevice("cloud-161", deviceCode, data);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new ServiceException(REMOTE_SERVICE_FAILURE);
+//        }
+//        return this.renderSuccess(Obj);
+//    }
 
 }

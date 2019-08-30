@@ -9,12 +9,12 @@ import com.yunku.demo.common.respons.ResponseData;
 import com.yunku.demo.config.WechatAccountConfig;
 import com.yunku.demo.core.model.MiniOauth2Token;
 import com.yunku.demo.core.model.MiniUser;
+import com.yunku.demo.core.service.DeviceService;
 import com.yunku.demo.core.service.UserService;
 import com.yunku.demo.core.subject.SignUser;
 import com.yunku.demo.core.subject.Subject;
 import com.yunku.demo.tool.MySubjectContext;
 import com.yunku.demo.tool.NetUtil;
-import com.yunku.demo.tool.RedisUtils;
 import com.yunku.demo.tool.TokenUtils;
 import io.swagger.annotations.*;
 import org.apache.commons.lang.StringUtils;
@@ -22,10 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,9 +36,6 @@ public class UserController extends MyBaseController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    RedisUtils redisUtils;
-
-    @Autowired
     WechatAccountConfig wechatAccountConfig;
 
     @Autowired
@@ -52,6 +46,9 @@ public class UserController extends MyBaseController {
 
     @Autowired
     Subject subject;
+
+    @Autowired
+    DeviceService deviceService;
 
     @ApiModel
     class User {
@@ -131,7 +128,6 @@ public class UserController extends MyBaseController {
                 new Thread(() -> {
                     MiniOauth2Token miniOauth2Token = this.wxlogin(user.getCode());
                     int result = userService.recordOpenId(signUser.getId(), miniOauth2Token.getOpenid());
-//                    logger.error(miniOauth2Token.toString());
                     if (result > 0) {
                         logger.info("用户id:" + signUser.getId() + " 登记openid:" + miniOauth2Token.getOpenid());
                     }
@@ -173,8 +169,8 @@ public class UserController extends MyBaseController {
     @ApiOperation(httpMethod = "POST", value = "用户退出登录")
     @ApiImplicitParams({
     })
-    public ResponseData logout(HttpServletRequest request) {
-//        redisUtils.del(request.getHeader(sessionProperties.getKeyName()));
+    public ResponseData logout() {
+        tokenUtils.removeToken();
         int result = userService.cleanOpenId(this.getSignUser().getId());
         if (result > 0) {
             return renderSuccess();
@@ -190,12 +186,14 @@ public class UserController extends MyBaseController {
     @ApiOperation(httpMethod = "POST", value = "test")
     @ApiImplicitParams({
     })
-    public Json<User> test(HttpServletRequest request) {
-//        redisUtils.setRemove()
+    public Json<User> test( HttpServletRequest request) {
         try {
-            System.out.println("test context===>" + MySubjectContext.get().toString());
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
+            SignUser user = MySubjectContext.get();
+            logger.info("test context===>" + user.toString());
+            request.setAttribute("device",user);
+            deviceService.fetchById(5855);
+//            Thread.sleep(1000);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -210,7 +208,7 @@ public class UserController extends MyBaseController {
                 .replace("JSCODE", code);
         try {
             String jobj = NetUtil.get(requestUrl);
-//            System.out.println("====== wexin net ======>" + jobj);
+            logger.info("====== wexin net ======>" + jobj);
             JSONObject jsonObject = JSON.parseObject(jobj);
             if (jsonObject == null) {
                 throw new ServiceException(WECHAT_SERVICE_FAILURE);

@@ -20,4 +20,9 @@ public class SimpleDeviceService implements DeviceService {
     public Device fetchById(Integer id) {
         return deviceMapper.selectByPrimaryKey(id);
     }
+
+    @Override
+    public Device fetchByCode(String deviceCode) {
+        return deviceMapper.selectDeviceByCode(deviceCode);
+    }
 }

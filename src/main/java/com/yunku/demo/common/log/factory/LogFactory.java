@@ -17,6 +17,7 @@ package com.yunku.demo.common.log.factory;
 
 import com.yunku.demo.common.constant.state.LogSucceed;
 import com.yunku.demo.common.constant.state.LogType;
+import com.yunku.demo.core.model.DeviceOperatingLog;
 import com.yunku.demo.core.model.LoginLog;
 import com.yunku.demo.core.model.OperationLog;
 
@@ -31,9 +32,30 @@ import java.util.Date;
 public class LogFactory {
 
     /**
+     * 创建设备操作日志
+     */
+    public static DeviceOperatingLog createDeviceOperationLog(Long deviceId, String deviceCode,Byte port,Integer userId,String userName, String operation, String location, String methodName, String message, LogSucceed succeed) {
+        DeviceOperatingLog deviceOperatingLog = new DeviceOperatingLog();
+        deviceOperatingLog.setCreateTime(new Date());
+        deviceOperatingLog.setDeviceCode(deviceCode);
+        deviceOperatingLog.setDeviceId(deviceId);
+        deviceOperatingLog.setLocation(location);
+        deviceOperatingLog.setMessage(message);
+        deviceOperatingLog.setMethod(methodName);
+        deviceOperatingLog.setOperation(operation);
+        deviceOperatingLog.setPort(port);
+        deviceOperatingLog.setOperatorId(userId);
+        deviceOperatingLog.setOperatorName(userName);
+        deviceOperatingLog.setSecceed(succeed.getMessage());
+        return deviceOperatingLog;
+    }
+
+    /**
      * 创建操作日志
      */
     public static OperationLog createOperationLog(LogType logType, Long userId, String bussinessName, String clazzName, String methodName, String msg, LogSucceed succeed) {
+        DeviceOperatingLog deviceOperatingLog = new DeviceOperatingLog();
+
         OperationLog operationLog = new OperationLog();
         operationLog.setLogType(logType.getMessage());
         operationLog.setLogName(bussinessName);
@@ -59,4 +81,6 @@ public class LogFactory {
         loginLog.setMessage(msg);
         return loginLog;
     }
+
+
 }

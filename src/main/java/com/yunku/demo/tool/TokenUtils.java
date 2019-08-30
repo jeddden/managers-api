@@ -6,12 +6,13 @@ import com.yunku.demo.config.properties.SessionProperties;
 import com.yunku.demo.core.subject.SignUser;
 import com.yunku.demo.tool.util.UUIDGenerator;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-import static com.yunku.demo.common.constant.ResponseStatusEnum.ENCRYPT_ERROR;
-import static com.yunku.demo.common.constant.ResponseStatusEnum.TOKEN_VERIFICATION_FAILED;
+import static com.yunku.demo.common.constant.ResponseStatusEnum.*;
 
 /**
  * @author Jeddden
@@ -20,11 +21,15 @@ import static com.yunku.demo.common.constant.ResponseStatusEnum.TOKEN_VERIFICATI
 @Component
 public final class TokenUtils {
 
+    private static final Logger logger = LoggerFactory.getLogger(TokenUtils.class);
+
     public static final String TOKEN_BEARER = "Bearer ";
 
     public static final String TOKEN_HEAD = "YK";
 
     public static final String TOKEN_USERID_BEARER = "-";
+
+    private static ThreadLocal<String> tl = new ThreadLocal<>();
 
     @Resource
     private RedisUtils redisUtils;
@@ -62,5 +67,37 @@ public final class TokenUtils {
             throw new ServiceException(ENCRYPT_ERROR);
         }
         return decode;
+    }
+
+    public final SignUser checkToken(String token) {
+        String tokenCode = tokenDecode(token);
+        logger.info("====== token code ======>:" + tokenCode);
+        put(tokenCode);
+        Object o = redisUtils.get(tokenCode);
+        if (o == null) {
+            throw new AuthenticationException(TOKEN_EXPIRED);
+        }
+        SignUser signUser = ((SignUser) o);
+        return signUser;
+    }
+
+    public final void flushTokenExprie(){
+        redisUtils.set(get(),MySubjectContext.get(),sessionProperties.getExpriationTime());
+    }
+
+    public final void removeToken(){
+        redisUtils.del(get());
+    }
+
+    public static final void put(String token){
+        tl.set(token);
+    }
+
+    public static final String get(){
+        return tl.get();
+    }
+
+    public static final void remove(){
+        tl.remove();
     }
 }

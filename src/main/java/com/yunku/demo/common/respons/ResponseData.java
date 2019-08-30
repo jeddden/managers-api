@@ -1,5 +1,7 @@
 package com.yunku.demo.common.respons;
 
+import com.yunku.demo.common.constant.ResponseStatusEnum;
+
 import java.io.Serializable;
 
 /**
@@ -48,6 +50,10 @@ public class ResponseData<T> implements Serializable {
 
     public static ErrorResponseData error(Integer status, String message, Object object) {
         return new ErrorResponseData(status, message, object);
+    }
+
+    public static ErrorResponseData error(ResponseStatusEnum responseStatusEnum){
+        return new ErrorResponseData(responseStatusEnum);
     }
 
     public Boolean getSuccess() {

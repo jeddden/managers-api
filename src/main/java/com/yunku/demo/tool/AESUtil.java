@@ -53,7 +53,7 @@ public class AESUtil {
         cipher.init(Cipher.ENCRYPT_MODE, getKey());
         byte[] encodeResult = cipher.doFinal(code.getBytes());
         String token = Hex.encodeHexString(encodeResult);
-        System.out.println("AESencode : " + token);
+//        System.out.println("AESencode : " + token);
         return token;
     }
 
@@ -62,7 +62,7 @@ public class AESUtil {
         cipher.init(Cipher.DECRYPT_MODE, getKey());
         byte[] decodeResult = cipher.doFinal(Hex.decodeHex(code));
         String token = new String(decodeResult);
-        System.out.println("AESdecode : " + token);
+//        System.out.println("AESdecode : " + token);
         return token;
 
     }

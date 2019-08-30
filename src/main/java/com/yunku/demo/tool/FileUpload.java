@@ -156,14 +156,14 @@ public class FileUpload {
      */
     public static boolean deleteServerPicture(List<String> paths, HttpServletRequest request) {
         boolean flag = true;
-        System.out.println("-------------开始删除图片-------------");
+        logger.info("-------------开始删除图片-------------");
         String fs = System.getProperty("file.separator");
         String rootPath = request.getSession().getServletContext().getRealPath("");
         for (int i = 0; i < paths.size(); i++) {
             String path = paths.get(i);
             path = paths.get(i).substring(path.indexOf(DEFULT_FILE_UPLOAD_PATH));
             String TEMP_PATH = rootPath + fs + path + fs;
-            System.out.println("--------------删除图片路径为" + TEMP_PATH);
+            logger.info("--------------删除图片路径为" + TEMP_PATH);
             File fileTemp = new File(TEMP_PATH);
             if (fileTemp.exists()) {
                 flag = fileTemp.delete();
@@ -171,7 +171,7 @@ public class FileUpload {
                 flag = false;
             }
         }
-        System.out.println("-----------结束删除图片------------图片删除状态为：" + flag);
+        logger.info("-----------结束删除图片------------图片删除状态为：" + flag);
         return flag;
     }
 }
